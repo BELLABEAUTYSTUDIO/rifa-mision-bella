@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rifa Misión de Amor - Espejo LED Touch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- General Styles & Variables (Pink/Vibrant Theme) --- */
+        :root {
+            --primary-color: #e91e63; /* Rosa vibrante */
+            --secondary-color: #c2185b; /* Rosa más oscuro */
+            --accent-color: #ffc107; /* Dorado/Ámbar */
+            --background-color: #fce4ec; /* Rosa muy pálido */
+            --text-color: #333;
+            --white-color: #fff;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--white-color);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px 40px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* --- Header --- */
+        header h1 {
+            font-family: var(--font-title);
+            color: var(--primary-color);
+            font-size: 2.8rem;
+            margin: 0 0 10px 0;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin: 0;
+        }
+
+        /* --- Prize Image Section --- */
+        #prize-section {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        #prize-section img {
+            max-width: 100%;
+            height: auto;
+            max-height: 500px; /* Constrain image height */
+            width: auto; /* Maintain aspect ratio */
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 5px solid var(--white-color);
+        }
+
+        /* --- Main Content Sections --- */
+        main {
+            margin-top: 20px;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        /* --- Raffle Roulette Section --- */
+        #raffle-section {
+            padding: 30px;
+            background-color: #fff3f8;
+            border-radius: 15px;
+            border: 2px dashed var(--primary-color);
+        }
+
+        #roulette-display {
+            font-family: var(--font-title);
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            background-color: var(--white-color);
+            padding: 20px 40px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 30px;
+            min-width: 150px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease-out;
+        }
+        
+        #spin-button {
+            font-family: var(--font-body);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white-color);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        #spin-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(233, 30, 99, 0.6);
+        }
+
+        #spin-button:active {
+            transform: translateY(-2px);
+        }
+
+        #spin-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            animation: none;
+            box-shadow: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Winner Section --- */
+        #winner-section {
+            display: none; /* Initially hidden */
+            padding: 40px;
+            border-radius: 15px;
+            background-color: var(--accent-color);
+            color: var(--white-color);
+            animation: fadeInZoom 0.5s ease-out;
+        }
+
+        #winner-section h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+
+        #winner-section h1 {
+            font-family: var(--font-title);
+            font-size: 3rem;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        #winner-name {
+             color: var(--white-color);
+        }
+
+        #reset-button {
+            margin-top: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            background-color: var(--white-color);
+            border: 2px solid var(--secondary-color);
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #reset-button:hover {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+        }
+
+        @keyframes fadeInZoom {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- Participants Section --- */
+        #participants-section h2 {
+            font-family: var(--font-title);
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        #participants-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        #participants-list li {
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap; /* Allows wrapping on small screens */
+        }
+        
+        #participants-list li:nth-child(even) {
+            background-color: #fff3f8;
+        }
+
+        #participants-list li:last-child {
+            border-bottom: none;
+        }
+        
+        #participants-list .participant-numbers {
+            font-size: 0.85em; 
+            color: #777;
+            margin-left: 10px; /* Adds space between name and numbers */
+            flex-shrink: 0; /* Prevents numbers from shrinking */
+        }
+
+        /* --- Footer --- */
+        footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            #roulette-display {
+                font-size: 4rem;
+            }
+            #spin-button {
+                font-size: 1.2rem;
+                padding: 12px 30px;
+            }
+            #winner-section h1 {
+                font-size: 2.2rem;
+            }
+            #participants-list li {
+                flex-direction: column; /* Stacks name and numbers vertically */
+                align-items: flex-start;
+            }
+            #participants-list .participant-numbers {
+                margin-left: 0;
+                margin-top: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Rifa "Misión de Amor" &#10084;</h1>
+            <p>Sorteo de un increíble Espejo LED Touch</p>
+        </header>
+
+        <main>
+            <!-- Section for the prize image -->
+            <section id="prize-section">
+		<h3 class="font-bold text-2xl text-pink-500 mb-3">El Gran Premio 🎁</h3>
+                <!-- CAMBIO IMPORTANTE: La imagen ahora apunta a un archivo local. -->
+            <!-- <img src="espejo-rifa.jpg" alt="Foto del premio: Espejo de cuerpo completo con luz LED y estantes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagen+no+disponible';"> -->
+		<img src="espejo-rifa.jpg" alt="[Imagen de un espejo LED de cuerpo completo con estantes adyacentes, iluminado con luz cálida en un ambiente hogareño.]" class="rounded-lg mb-4 w-full h-auto">
+                <p class="font-semibold text-lg">Espejo LED TOUCH de 160x50 cm</p>
+            </section>
+
+            <!-- Section for the raffle wheel and button -->
+            <section id="raffle-section">
+                <div id="roulette-display">00</div>
+                <button id="spin-button">¡GIRAR LA RULETA!</button>
+            </section>
+
+            <!-- Section to display the winner, initially hidden -->
+            <section id="winner-section">
+                <h2>¡El número ganador es el <span id="winning-number"></span>!</h2>
+                <h1>¡Felicidades <span id="winner-name"></span>!</h1>
+                <p>Eres la afortunada ganadora del Espejo LED Touch.</p>
+                <button id="reset-button">Realizar otro sorteo</button>
+            </section>
+
+            <!-- Section to list all participants -->
+            <section id="participants-section">
+                <h2>Participantes</h2>
+                <ul id="participants-list">
+                    <!-- The list of participants will be populated by JavaScript -->
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>Creado con &#10084; para la Misión de Amor de BELLA by Esmeralda.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA ---
+            const participants = [
+                { name: "Rosalia Rodriguez Romero", numbers: "7-22-24-29-30-31-32-36-37-40" },
+                { name: "Alexmar", numbers: "59-62-64-66-68" },
+                { name: "Laura Salinas", numbers: "5-19-25" },
+                { name: "Carol", numbers: "15-21-28-35-50-63-70-81-84-95" },
+                { name: "Solange Barcelona", numbers: "2-39" },
+                { name: "Yudayma Ibarra", numbers: "47-57-93" },
+                { name: "Jesy", numbers: "8-53-65" },
+                { name: "Karina Fernandez", numbers: "16-33-67-76-87" },
+                { name: "Soledad Garay", numbers: "17-27" },
+                { name: "Wendy Mena", numbers: "10-73" },
+                { name: "Nelson", numbers: "1-4-43-72-82" },
+                { name: "Days", numbers: "23" },
+                { name: "Andrea", numbers: "100-98" },
+                { name: "Norby", numbers: "20-13" },
+                { name: "Marcela Hernadez", numbers: "34-61-75" },
+                { name: "Alexandra Clienta Cejas", numbers: "11-26" },
+                { name: "Javiera Pizarro", numbers: "6-99" },
+                { name: "Elizabeth", numbers: "18" },
+                { name: "Love de Best", numbers: "48" },
+                { name: "Gina", numbers: "54-56" },
+                { name: "Roxana Osorio", numbers: "14-60-77" },
+                { name: "Valeska Aguirre Ortiz", numbers: "74-38" },
+                { name: "Paty", numbers: "3-9-12" }
+                { name: "Kathrin Roxanna", numbers: "41-42-44-45-46-49-51-52-55-58" },
+                { name: "Shirley Espinoza", numbers: "83-85-86-88-89-90-91-92-94-96-97" },
+                { name: "Eduardo José", numbers: "69-71-78-79-80" }
+            ];
+
+            // --- ELEMENTS ---
+            const participantsList = document.getElementById('participants-list');
+            const spinButton = document.getElementById('spin-button');
+            const resetButton = document.getElementById('reset-button');
+            const rouletteDisplay = document.getElementById('roulette-display');
+            const winnerSection = document.getElementById('winner-section');
+            const raffleSection = document.getElementById('raffle-section');
+            const winningNumberSpan = document.getElementById('winning-number');
+            const winnerNameSpan = document.getElementById('winner-name');
+
+            // --- FUNCTIONS ---
+
+            function displayParticipants() {
+                participantsList.innerHTML = '';
+                participants.forEach(p => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<span>${p.name}</span> <span class="participant-numbers">(Números: ${p.numbers})</span>`;
+                    participantsList.appendChild(listItem);
+                });
+            }
+
+            function findWinner(number) {
+                for (const participant of participants) {
+                    const participantNumbers = participant.numbers.split('-').map(Number);
+                    if (participantNumbers.includes(number)) {
+                        return participant.name;
+                    }
+                }
+                return "Nadie (¡el número no fue vendido!)";
+            }
+
+            /**
+             * Handles the new, smoother raffle animation.
+             */
+            function startRaffle() {
+                spinButton.disabled = true;
+                spinButton.style.animation = 'none';
+                winnerSection.style.display = 'none';
+
+                let spinInterval;
+                let intervalTime = 25; // Start with a fast interval
+                const winningNumber = Math.floor(Math.random() * 100) + 1;
+                const totalDuration = 4000; // 4 seconds total spin time
+                const slowDownPoint = totalDuration - 1500; // Start slowing down in the last 1.5s
+
+                // Function to update the display
+                const updateDisplay = () => {
+                    const currentNumber = Math.floor(Math.random() * 100) + 1;
+                    rouletteDisplay.textContent = currentNumber.toString().padStart(2, '0');
+                };
+                
+                spinInterval = setInterval(updateDisplay, intervalTime);
+
+                // Logic to slow down the spin
+                setTimeout(() => {
+                    clearInterval(spinInterval);
+                    spinInterval = setInterval(updateDisplay, 50);
+                }, slowDownPoint - 1000);
+
+                setTimeout(() => {
+                    clearInterval(spinInterval);
+                    spinInterval = setInterval(updateDisplay, 100);
+                }, slowDownPoint - 500);
+                
+                setTimeout(() => {
+                    clearInterval(spinInterval);
+                    spinInterval = setInterval(updateDisplay, 200);
+                }, slowDownPoint);
+
+
+                // Stop on the final number and show the winner
+                setTimeout(() => {
+                    clearInterval(spinInterval);
+                    rouletteDisplay.textContent = winningNumber.toString().padStart(2, '0');
+                    rouletteDisplay.style.transform = 'scale(1.2)'; // Make it pop
+
+                    const winnerName = findWinner(winningNumber);
+                    winningNumberSpan.textContent = winningNumber;
+                    winnerNameSpan.textContent = winnerName;
+                    
+                    setTimeout(() => {
+                        raffleSection.style.display = 'none';
+                        winnerSection.style.display = 'block';
+                    }, 500); // Short delay before showing winner card
+
+                }, totalDuration);
+            }
+            
+            function resetRaffle() {
+                winnerSection.style.display = 'none';
+                raffleSection.style.display = 'block';
+                rouletteDisplay.textContent = '00';
+                rouletteDisplay.style.transform = 'scale(1)';
+                spinButton.disabled = false;
+                spinButton.style.animation = 'pulse 2s infinite';
+            }
+
+            // --- INITIALIZATION ---
+            displayParticipants();
+            spinButton.addEventListener('click', startRaffle);
+            resetButton.addEventListener('click', resetRaffle);
+        });
+    </script>
+</body>
+</html>

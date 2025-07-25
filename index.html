@@ -130,17 +130,20 @@
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
-            animation: pulse 2s infinite;
+            position: relative;
+            overflow: visible;
+        }
+
+        #spin-button:not(:disabled) {
+            animation: pulse 2.5s infinite;
         }
 
         #spin-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(233, 30, 99, 0.6);
+            transform: translateY(-3px);
         }
 
         #spin-button:active {
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         #spin-button:disabled {
@@ -151,9 +154,22 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(233, 30, 99, 0.7);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 12px rgba(233, 30, 99, 0);
+            }
+        }
+
+        .animate-pulse-custom {
+            animation: pulse 2.5s infinite;
+        }
+
+        .fade-in-on-load {
+            opacity: 0;
         }
 
         /* --- Winner Section --- */
@@ -311,13 +327,10 @@
                 <p>Espejo LED TOUCH de 160x50 cm</p>
             </section>
 
-            <!-- Section for the raffle wheel and [button <button id="spin-button">] -->
+            <!-- Section for the raffle wheel and button -->
             <section id="raffle-section">
                 <div id="roulette-display">00</div>
-                <button id="random-button" class="bg-pink-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-pink-600 transform hover:scale-105 transition-all duration-300 ease-in-out disabled:bg-gray-400 disabled:cursor-wait animate-pulse-custom">
-                ¡GIRAR LA RULETA!
-                <p id="random-status" class="text-sm text-gray-500 mt-2 h-4"></p>
-                </button>
+                <button id="spin-button">¡GIRAR LA RULETA!</button>
             </section>
 
             <!-- Section to display the winner, initially hidden -->
@@ -407,7 +420,7 @@
 
             function startRaffle() {
                 spinButton.disabled = true;
-                spinButton.style.animation = 'none';
+                // La animación se detiene automáticamente gracias al CSS :not(:disabled)
                 winnerSection.style.display = 'none';
 
                 let spinInterval;
@@ -461,7 +474,7 @@
                 rouletteDisplay.textContent = '00';
                 rouletteDisplay.style.transform = 'scale(1)';
                 spinButton.disabled = false;
-                spinButton.style.animation = 'pulse 2s infinite';
+                // El botón volverá a animarse automáticamente gracias al CSS :not(:disabled)
             }
 
             // --- INITIALIZATION ---

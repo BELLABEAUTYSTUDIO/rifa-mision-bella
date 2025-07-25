@@ -64,14 +64,27 @@
             margin-bottom: 30px;
         }
 
+        #prize-section h3 {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
         #prize-section img {
             max-width: 100%;
             height: auto;
-            max-height: 500px; /* Constrain image height */
-            width: auto; /* Maintain aspect ratio */
+            max-height: 500px;
+            width: auto;
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
             border: 5px solid var(--white-color);
+            margin-bottom: 1rem;
+        }
+
+        #prize-section p {
+            font-weight: 600;
+            font-size: 1.125rem;
         }
 
         /* --- Main Content Sections --- */
@@ -145,7 +158,7 @@
 
         /* --- Winner Section --- */
         #winner-section {
-            display: none; /* Initially hidden */
+            display: none;
             padding: 40px;
             border-radius: 15px;
             background-color: var(--accent-color);
@@ -218,7 +231,7 @@
             font-size: 1.1rem;
             display: flex;
             justify-content: space-between;
-            flex-wrap: wrap; /* Allows wrapping on small screens */
+            flex-wrap: wrap;
         }
         
         #participants-list li:nth-child(even) {
@@ -232,8 +245,8 @@
         #participants-list .participant-numbers {
             font-size: 0.85em; 
             color: #777;
-            margin-left: 10px; /* Adds space between name and numbers */
-            flex-shrink: 0; /* Prevents numbers from shrinking */
+            margin-left: 10px;
+            flex-shrink: 0;
         }
 
         /* --- Footer --- */
@@ -268,7 +281,7 @@
                 font-size: 2.2rem;
             }
             #participants-list li {
-                flex-direction: column; /* Stacks name and numbers vertically */
+                flex-direction: column;
                 align-items: flex-start;
             }
             #participants-list .participant-numbers {
@@ -289,11 +302,13 @@
         <main>
             <!-- Section for the prize image -->
             <section id="prize-section">
-		<h3 class="font-bold text-2xl text-pink-500 mb-3">El Gran Premio 🎁</h3>
-                <!-- CAMBIO IMPORTANTE: La imagen ahora apunta a un archivo local. -->
-            <!-- <img src="espejo-rifa.jpg" alt="Foto del premio: Espejo de cuerpo completo con luz LED y estantes" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagen+no+disponible';"> -->
-		<img src="espejo-rifa.jpg" alt="[Imagen de un espejo LED de cuerpo completo con estantes adyacentes, iluminado con luz cálida en un ambiente hogareño.]" class="rounded-lg mb-4 w-full h-auto">
-                <p class="font-semibold text-lg">Espejo LED TOUCH de 160x50 cm</p>
+                <h3>El Gran Premio 🎁</h3>
+                <!-- Imagen con placeholder en caso de error -->
+                <img src="espejo-rifa.jpg" alt="Espejo LED de cuerpo completo con estantes adyacentes, iluminado con luz cálida" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; padding: 40px; background-color: #f0f0f0; border-radius: 15px; color: #666;">
+                    📸 Imagen del premio no disponible
+                </div>
+                <p>Espejo LED TOUCH de 160x50 cm</p>
             </section>
 
             <!-- Section for the raffle wheel and button -->
@@ -350,7 +365,7 @@
                 { name: "Gina", numbers: "54-56" },
                 { name: "Roxana Osorio", numbers: "14-60-77" },
                 { name: "Valeska Aguirre Ortiz", numbers: "74-38" },
-                { name: "Paty", numbers: "3-9-12" }
+                { name: "Paty", numbers: "3-9-12" },
                 { name: "Kathrin Roxanna", numbers: "41-42-44-45-46-49-51-52-55-58" },
                 { name: "Shirley Espinoza", numbers: "83-85-86-88-89-90-91-92-94-96-97" },
                 { name: "Eduardo José", numbers: "69-71-78-79-80" }
@@ -387,21 +402,17 @@
                 return "Nadie (¡el número no fue vendido!)";
             }
 
-            /**
-             * Handles the new, smoother raffle animation.
-             */
             function startRaffle() {
                 spinButton.disabled = true;
                 spinButton.style.animation = 'none';
                 winnerSection.style.display = 'none';
 
                 let spinInterval;
-                let intervalTime = 25; // Start with a fast interval
+                let intervalTime = 25;
                 const winningNumber = Math.floor(Math.random() * 100) + 1;
-                const totalDuration = 4000; // 4 seconds total spin time
-                const slowDownPoint = totalDuration - 1500; // Start slowing down in the last 1.5s
+                const totalDuration = 4000;
+                const slowDownPoint = totalDuration - 1500;
 
-                // Function to update the display
                 const updateDisplay = () => {
                     const currentNumber = Math.floor(Math.random() * 100) + 1;
                     rouletteDisplay.textContent = currentNumber.toString().padStart(2, '0');
@@ -409,7 +420,6 @@
                 
                 spinInterval = setInterval(updateDisplay, intervalTime);
 
-                // Logic to slow down the spin
                 setTimeout(() => {
                     clearInterval(spinInterval);
                     spinInterval = setInterval(updateDisplay, 50);
@@ -425,12 +435,10 @@
                     spinInterval = setInterval(updateDisplay, 200);
                 }, slowDownPoint);
 
-
-                // Stop on the final number and show the winner
                 setTimeout(() => {
                     clearInterval(spinInterval);
                     rouletteDisplay.textContent = winningNumber.toString().padStart(2, '0');
-                    rouletteDisplay.style.transform = 'scale(1.2)'; // Make it pop
+                    rouletteDisplay.style.transform = 'scale(1.2)';
 
                     const winnerName = findWinner(winningNumber);
                     winningNumberSpan.textContent = winningNumber;
@@ -439,7 +447,7 @@
                     setTimeout(() => {
                         raffleSection.style.display = 'none';
                         winnerSection.style.display = 'block';
-                    }, 500); // Short delay before showing winner card
+                    }, 500);
 
                 }, totalDuration);
             }
